@@ -8,6 +8,11 @@ import ReduxThunk from "redux-thunk";
 import {Provider} from "react-redux";
 
 import reducers from "./reducers";
+import "element-theme-default";
+import {i18n} from "element-react";
+import locale from "element-react/src/locale/lang/en";
+
+i18n.use(locale);
 
 const store = createStore(reducers, applyMiddleware(ReduxThunk));
 
