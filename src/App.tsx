@@ -1,18 +1,20 @@
 import React from "react";
 import "./App.scss";
 import {Switch, Route, Redirect} from "react-router";
-import {HashRouter as Router} from "react-router-dom";
+import {Router} from "react-router-dom";
 import {connect} from "react-redux";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
+import About from "./views/About";
+import Profile from "./views/Profile";
+import Notfound from "./views/Notfound";
 import history from "./utils/history";
 
-function App({user}: any) {
-  var isAuthenticated = false;
-  const token = localStorage.getItem("token");
+function App({auth}: any) {
+  let isAuthenticated = false;
 
-  if (token === null && user.AccessToken === false) {
+  if (auth.AccessToken === undefined) {
     isAuthenticated = false;
   } else {
     isAuthenticated = true;
@@ -40,7 +42,7 @@ function App({user}: any) {
     );
   }
 
-  function PublicRoute({component, ...rest}: any) {
+  function PublicRouteCheck({component, ...rest}: any) {
     return (
       <Route
         {...rest}
@@ -59,15 +61,23 @@ function App({user}: any) {
     );
   }
 
+  function PublicRoute({component, ...rest}: any) {
+    return (
+      <Route {...rest} render={(props: any) => React.createElement(component, props)} />
+    );
+  }
+
   return (
     <div className="App">
       <Router history={history}>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/home" />} />
           <PrivateRoute path="/home" component={Home} />
-          <PublicRoute path="/login" component={Login} />
+          <PublicRouteCheck path="/login" component={Login} />
           <PublicRoute path="/signup" component={Signup} />
-          <Route component={Error} />
+          <PublicRoute path="/about" component={About} />
+          <PrivateRoute path="/profile" component={Profile} />
+          <Route component={Notfound} />
         </Switch>
       </Router>
     </div>
@@ -76,7 +86,7 @@ function App({user}: any) {
 
 function mapStateToProps(state: any) {
   return {
-    user: state.user,
+    auth: state.auth,
   };
 }
 
