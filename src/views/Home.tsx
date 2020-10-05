@@ -20,6 +20,7 @@ class Home extends React.Component<PropsType> {
     return (
       <div className="Home">
         <div>Home</div>
+        <div>BASEURL: {process.env.REACT_APP_BASEURL}</div>
         <Button type="primary" onClick={this.handleLogout.bind(this)}>
           Logout
         </Button>
